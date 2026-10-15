@@ -78,8 +78,25 @@ Compose starts the Angular development server on all container interfaces using 
 
 ## 4. Configure the environment
 
+Run the setup script (requires Bash and OpenSSL):
+
+```sh
+./setup.sh
+```
+
+It creates `.env` from `.env.example`, generates random database names/usernames and a cryptographically random 64-character hexadecimal password, and sets file permissions to `600` (owner read/write only). Existing `.env` files are preserved, so rerunning the script does not rotate credentials. `.gitignore` excludes local secrets.
+
+Optionally override settings on the first run:
+
+```sh
+POSTGRES_USER=myapp POSTGRES_DB=myapp BACKEND_PORT=8081 FRONTEND_PORT=4201 ./setup.sh
+```
+
+Alternatively, configure it manually:
+
 ```sh
 cp .env.example .env
+chmod 600 .env
 ```
 
 Edit `.env`: choose a database username, strong local password, database name, and available application ports. `POSTGRES_PORT` configures the database's internal listening port; it is not exposed to the host. Use simple alphanumeric/underscore database names and usernames. Quote values containing Compose-special characters as described in the [Compose environment-file syntax](https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/#env-file-syntax).
