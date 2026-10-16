@@ -19,7 +19,7 @@ If you already cloned this repository, start in its root directory.
 ## 2. Generate the backend using Spring Initializr
 
 1. Open [Spring Initializr](https://start.spring.io/).
-2. Select **Maven**, **Java**, a stable Spring Boot release, **Jar** packaging, and **Java 21**. Choose a Boot release supporting Java 21.
+2. Select **Maven**, **Java**, a stable Spring Boot release, **Jar** packaging, and **Java 25**. Choose a Boot release supporting Java 25.
 3. Set your group/package name and use `backend` as the artifact name.
 4. Add **Spring Web**, **Spring Data JPA**, and **PostgreSQL Driver**. Consult [dependency-cheatsheet.md](dependency-cheatsheet.md) for optional dependencies.
 5. Click **Generate**, extract the downloaded ZIP, and move the extracted project into this repository as `backend/`.
@@ -28,14 +28,14 @@ If you already cloned this repository, start in its root directory.
 Create `backend/Dockerfile` with these complete contents:
 
 ```dockerfile
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 COPY . .
 RUN chmod +x mvnw && ./mvnw -B -DskipTests package && \
     JAR=$(find target -maxdepth 1 -name '*.jar' ! -name '*-plain.jar' | head -n 1) && \
     test -n "$JAR" && cp "$JAR" /app/application.jar
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 WORKDIR /app
 COPY --from=build /app/application.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
